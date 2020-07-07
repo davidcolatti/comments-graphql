@@ -1,50 +1,19 @@
 import React, { useState } from 'react';
-import CommentsBlock from 'simple-react-comments';
+import { useQuery } from '@apollo/client';
+import { GET_CONTACTS } from './graphql/queries';
 
-const commentsData = [
-  {
-    fullName: 'David',
-    createdAt: new Date(),
-    text: "Hi, it's David"
-  },
-  {
-    fullName: 'Luis',
-    createdAt: new Date(),
-    text: "Hi, it's Luis"
-  },
-  {
-    fullName: 'Garrett',
-    createdAt: new Date(),
-    text: "Hi, it's Garrett"
-  }
-];
+// components
+import Comments from './components/Comments';
 
 const App = () => {
-  const [comments, setComments] = useState(commentsData);
+  const { loading, error, data } = useQuery(GET_CONTACTS);
 
-  function onCommentSubmit(text) {
-    if (text.length > 0) {
-      setComments([
-        ...comments,
-        {
-          fullName: 'Name',
-          createdAt: new Date(),
-          text
-        }
-      ]);
-      console.log('submit:', text);
-    }
-  }
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
 
   return (
-    <div className="app">
-      <CommentsBlock
-        comments={comments}
-        signinUrl={'/signin'}
-        isLoggedIn
-        reactRouter={false} // set to true if you are using react-router
-        onSubmit={text => onCommentSubmit(text)}
-      />
+    <div>
+      <Comments contacts={data.contacts} />
     </div>
   );
 };
