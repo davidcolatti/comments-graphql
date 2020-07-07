@@ -11,11 +11,30 @@ let typeDefs = gql`
   type Query {
     contacts: [Contact]
   }
+  type Mutation {
+    addContact(name: String, city: String, state: String): Contact!
+  }
 `;
+
+interface Contact {
+  name: String;
+  state: String;
+  city: String;
+}
+
+let mockDB: Contact[] = [];
 
 let resolvers = {
   Query: {
-    contacts: () => contacts
+    contacts: () => mockDB
+  },
+  Mutation: {
+    addContact(_: any, { name, state, city }: Contact) {
+      const contact = { name, state, city };
+      mockDB.push(contact);
+
+      return contact;
+    }
   }
 };
 

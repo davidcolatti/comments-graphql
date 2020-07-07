@@ -4,18 +4,17 @@ import CommentsBlock from 'simple-react-comments';
 const Comments = ({ contacts }) => {
   const [comments, setComments] = useState([]);
 
+  // inside of my useEffect I grab the contacts data from graphql and refactor the array to make it into comments
   useEffect(() => {
-    if (contacts) {
-      let comments = contacts.map(contact => {
-        return {
-          fullName: contact.name,
-          createdAt: new Date(),
-          text: `Hi, I'm from ${contact.city}, ${contact.state}`
-        };
-      });
+    let comments = contacts.map(contact => {
+      return {
+        fullName: contact.name,
+        createdAt: new Date(),
+        text: `Hi, I'm from ${contact.city}, ${contact.state}`
+      };
+    });
 
-      setComments(comments);
-    }
+    setComments(comments);
   }, []);
 
   function onCommentSubmit(text) {
@@ -28,7 +27,6 @@ const Comments = ({ contacts }) => {
           text
         }
       ]);
-      console.log('submit:', text);
     }
   }
 
