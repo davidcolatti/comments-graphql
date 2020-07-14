@@ -1,43 +1,5 @@
 import { ApolloServer, gql } from 'apollo-server';
 
-let typeDefs = gql`
-  type Contact {
-    name: String
-    address: String
-    city: String
-    state: String
-    zip: String
-  }
-  type Query {
-    contacts: [Contact]
-  }
-  type Mutation {
-    addContact(name: String, city: String, state: String): Contact!
-  }
-`;
-
-interface Contact {
-  name: String;
-  state: String;
-  city: String;
-}
-
-let mockDB: Contact[] = [];
-
-let resolvers = {
-  Query: {
-    contacts: () => mockDB
-  },
-  Mutation: {
-    addContact(_: any, { name, state, city }: Contact) {
-      const contact = { name, state, city };
-      mockDB.push(contact);
-
-      return contact;
-    }
-  }
-};
-
 let contacts = [
   {
     name: 'Homer Simpson',
@@ -75,6 +37,44 @@ let contacts = [
     zip: '33305'
   }
 ];
+
+let typeDefs = gql`
+  type Contact {
+    name: String
+    address: String
+    city: String
+    state: String
+    zip: String
+  }
+  type Query {
+    contacts: [Contact]
+  }
+  type Mutation {
+    addContact(name: String, city: String, state: String): Contact!
+  }
+`;
+
+interface Contact {
+  name: String;
+  state: String;
+  city: String;
+}
+
+let mockDB: Contact[] = contacts;
+
+let resolvers = {
+  Query: {
+    contacts: () => mockDB
+  },
+  Mutation: {
+    addContact(_: any, { name, state, city }: Contact) {
+      const contact = { name, state, city };
+      mockDB.push(contact);
+
+      return contact;
+    }
+  }
+};
 
 let server = new ApolloServer({ typeDefs, resolvers });
 server.listen({ host: '127.0.0.1', port: 4000 }).then(({ url }) => {

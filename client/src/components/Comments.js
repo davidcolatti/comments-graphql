@@ -33,7 +33,13 @@ const Comments = ({ contacts }) => {
   return (
     <div className="app">
       <CommentsBlock
-        comments={comments}
+        comments={contacts.map(contact => {
+          return {
+            fullName: contact.name,
+            createdAt: new Date(),
+            text: `Hi, I'm from ${contact.city}, ${contact.state}`
+          };
+        })}
         signinUrl={'/signin'}
         isLoggedIn
         reactRouter={false} // set to true if you are using react-router

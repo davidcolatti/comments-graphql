@@ -5,21 +5,6 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var apollo_server_1 = require("apollo-server");
-var typeDefs = apollo_server_1.gql(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  type Contact {\n    name: String\n    address: String\n    city: String\n    state: String\n    zip: String\n  }\n  type Query {\n    contacts: [Contact]\n  }\n  type Mutation {\n    addContact(name: String, city: String, state: String): Contact!\n  }\n"], ["\n  type Contact {\n    name: String\n    address: String\n    city: String\n    state: String\n    zip: String\n  }\n  type Query {\n    contacts: [Contact]\n  }\n  type Mutation {\n    addContact(name: String, city: String, state: String): Contact!\n  }\n"])));
-var mockDB = [];
-var resolvers = {
-    Query: {
-        contacts: function () { return mockDB; }
-    },
-    Mutation: {
-        addContact: function (_, _a) {
-            var name = _a.name, state = _a.state, city = _a.city;
-            var contact = { name: name, state: state, city: city };
-            mockDB.push(contact);
-            return contact;
-        }
-    }
-};
 var contacts = [
     {
         name: 'Homer Simpson',
@@ -57,6 +42,21 @@ var contacts = [
         zip: '33305'
     }
 ];
+var typeDefs = apollo_server_1.gql(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  type Contact {\n    name: String\n    address: String\n    city: String\n    state: String\n    zip: String\n  }\n  type Query {\n    contacts: [Contact]\n  }\n  type Mutation {\n    addContact(name: String, city: String, state: String): Contact!\n  }\n"], ["\n  type Contact {\n    name: String\n    address: String\n    city: String\n    state: String\n    zip: String\n  }\n  type Query {\n    contacts: [Contact]\n  }\n  type Mutation {\n    addContact(name: String, city: String, state: String): Contact!\n  }\n"])));
+var mockDB = contacts;
+var resolvers = {
+    Query: {
+        contacts: function () { return mockDB; }
+    },
+    Mutation: {
+        addContact: function (_, _a) {
+            var name = _a.name, state = _a.state, city = _a.city;
+            var contact = { name: name, state: state, city: city };
+            mockDB.push(contact);
+            return contact;
+        }
+    }
+};
 var server = new apollo_server_1.ApolloServer({ typeDefs: typeDefs, resolvers: resolvers });
 server.listen({ host: '127.0.0.1', port: 4000 }).then(function (_a) {
     var url = _a.url;

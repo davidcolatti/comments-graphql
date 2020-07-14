@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_CONTACT } from '../graphql/mutations';
 
-const AddComment = () => {
+const AddComment = ({ refetch }) => {
   const [addContact, { data }] = useMutation(ADD_CONTACT);
+
+  useEffect(() => {
+    refetch();
+  }, [data]);
 
   function btnClick(e) {
     e.preventDefault();
