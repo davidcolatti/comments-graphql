@@ -1,8 +1,9 @@
 import { gql } from '@apollo/client';
 
 export const GET_CONTACTS = gql`
-  query GetContacts {
+  query {
     contacts {
+      id
       name
       city
       state

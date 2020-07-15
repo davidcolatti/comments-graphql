@@ -2,6 +2,7 @@ import { ApolloServer, gql } from 'apollo-server';
 
 let contacts = [
   {
+    id: '1',
     name: 'Homer Simpson',
     address: '742 Evergreen Terrace',
     city: 'Springfield',
@@ -9,6 +10,7 @@ let contacts = [
     zip: '33333'
   },
   {
+    id: '2',
     name: 'Mr. Burns',
     address: '1000 Mammon Lane',
     city: 'Parkland',
@@ -16,6 +18,7 @@ let contacts = [
     zip: '33076'
   },
   {
+    id: '3',
     name: 'Moe Szyslak',
     address: '57 Walnut St.',
     city: 'Tamarac',
@@ -23,6 +26,7 @@ let contacts = [
     zip: '33068'
   },
   {
+    id: '4',
     name: 'W. Seymour Skinner',
     address: '330 Pikeland Ave.',
     city: 'Pompano',
@@ -30,6 +34,7 @@ let contacts = [
     zip: '33067'
   },
   {
+    id: '5',
     name: 'Waylon Joseph Smithers Jr.',
     address: '333 Pikeland Ave.',
     city: '	Wilton Manors',
@@ -40,6 +45,7 @@ let contacts = [
 
 let typeDefs = gql`
   type Contact {
+    id: String
     name: String
     address: String
     city: String
@@ -51,10 +57,12 @@ let typeDefs = gql`
   }
   type Mutation {
     addContact(name: String, city: String, state: String): Contact!
+    editContact(id: String, name: String, city: String, state: String): Contact!
   }
 `;
 
 interface Contact {
+  id: String;
   name: String;
   state: String;
   city: String;
@@ -68,10 +76,29 @@ let resolvers = {
   },
   Mutation: {
     addContact(_: any, { name, state, city }: Contact) {
-      const contact = { name, state, city };
+      const contact = {
+        id: Math.floor(Math.random() * 100000).toString(),
+        name,
+        city,
+        state
+      };
+
       mockDB.push(contact);
 
       return contact;
+    },
+    editContact(_: any, variables: Contact) {
+      let i: number = 0;
+      let contact = mockDB.find((each, index) => {
+        i = index;
+        return each.id === variables.id;
+      });
+
+      const newContact = { ...contact, ...variables };
+
+      mockDB[i] = newContact;
+
+      return newContact;
     }
   }
 };

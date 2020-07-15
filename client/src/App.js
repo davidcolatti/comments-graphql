@@ -7,7 +7,7 @@ import Comments from './components/Comments';
 import AddComment from './components/AddComment';
 
 const App = () => {
-  const { loading, error, data, refetch } = useQuery(GET_CONTACTS);
+  const { loading, error, data } = useQuery(GET_CONTACTS);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
@@ -15,7 +15,7 @@ const App = () => {
   return (
     <div>
       <Comments contacts={data.contacts} />
-      <AddComment refetch={refetch} />
+      <AddComment />
     </div>
   );
 };
